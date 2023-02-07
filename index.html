@@ -9,7 +9,7 @@
         max-width: 600px;
         margin: 15px 0;
     }
-    a.counter:hover {
+    a.vote-text:hover {
         text-decoration: underline;
         font-weight: bold;
     }
@@ -18,24 +18,38 @@
 <body>
     <div>
         <script>
+            // add new memes to this list
+            let memes = [
+                          {"src":"img/7abaeu.jpg", "width":"100%", "likes":randInt(), "dislikes":randInt()},
+                          {"src":"img/7abeca.jpg", "width":"100%", "likes":randInt(), "dislikes":randInt()},
+                          {"src":"img/7abhjx.jpg", "width":"100%", "likes":randInt(), "dislikes":randInt()}
+                       ]
+
             let template = {'<>':'div',
                             'html':[{'<>':'img','src':'${src}', 'width':'${width}'},
                                     {'<>':'br'},
-                                    {'<>':'span', 'html':'${likes}'},
-                                    {'<>':'a', 'class':'counter', 
+                                    {'<>':'span', 'class':'vote-counter', 'html':'${likes}'},
+                                    {'<>':'a', 'class':'vote-text',
                                           'html':"\tA billboard on the side of the road that screams reassurance that whatever you are doing is okay. You are okay."},
                                     {'<>':'br'},
-                                    {'<>':'span', 'html':'${dislikes}'},
-                                    {'<>':'a', 'class':'counter', 
+                                    {'<>':'span', 'class':'vote-counter', 'html':'${dislikes}'},
+                                    {'<>':'a', 'class':'vote-text', 
                                           'html':"\tI don't think about you at all"},
                                     {'<>':'hr'}]
                             };
             
-            fetch('https://raw.githubusercontent.com/ltaylor2/madmemes/main/memes.json').then(response => {
-                  return response.json();
-                }).then(data => {
-                    document.write( json2html.render(data, template) );
+            function randInt() {return Math.floor(Math.random() * 1000); }
+
+
+            document.write( json2html.render(memes, template) );
+
+            $('.vote-text').each(function() {
+                this.addEventListener("click", function() {
+                    let voteCounter = this.previousSibling
+                    voteCounter.innerHTML = parseInt(voteCounter.innerHTML) + 1;
                 });
+            });
+
         </script>
     </div>
 </body>
