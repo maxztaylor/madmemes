@@ -32,10 +32,10 @@
                             }
             
             let memes; 
-            
+
             fetch("https://raw.githubusercontent.com/ltaylor2/madmemes/main/memes.json")
                         .then(response => response.json())
-                        .then(json => json = memes);
+                        .then(json => memes = json);
 
             document.write( json2html.render(memes, template) );
         </script>
