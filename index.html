@@ -31,7 +31,7 @@
                                     {'<>':'hr'}]
                             }
             
-            let memes = fetch("./memes.json")
+            let memes = fetch("https://github.com/ltaylor2/madmemes/blob/main/memes.json")
                         .then(response => response.json())
                         .then(json => console.log(json));
 
