@@ -1,14 +1,18 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-    <title>I don't think about you at all</title>
-</head>
+<script src="./lib/json2html/json2html.js"></script>
+<script src="./lib/jquery-3.6.3.min.js"></script>
+<script type="text/javascript" src="./memes.json"></script>
 
 <style>
     img {
         max-width: 600px;
         margin: 15px 0;
+    }
+    a.counter:hover {
+        text-decoration: underline;
+        font-weight: bold;
     }
 </style>
 
@@ -17,13 +21,28 @@
         <h2>that's what the money is for</h2>
     </div>
     <div>
-        <hr>
-        <img src="./img/7abaeu.jpg" width="100%"/>
-        <hr>
-        <img src="./img/7abeca.jpg" width="100%"/>
-        <hr>
-        <img src="./img/7abhjx.jpg" width="100%"/>
+        <script>
+            let template = {'<>':'div',
+                            'html':[{'<>':'img','src':'${src}','width':'${width}'},
+                                    {'<>':'br'},
+                                    {'<>':'span', 'html':'${likes}'},
+                                    {'<>':'a', 'class':'counter', 
+                                          'html':"\tA billboard on the side of the road that screams reassurance that whatever you are doing is okay. You are okay."},
+                                    {'<>':'br'},
+                                    {'<>':'span', 'html':'${dislikes}'},
+                                    {'<>':'a', 'class':'counter', 
+                                          'html':"\tI don't think about you at all"},
+                                    {'<>':'hr'}]
+                            }
+            
+            let memes = fetch("./memes.json")
+                        .then(response => response.json())
+                        .then(json => console.log(json));
+
+            document.write( json2html.render(memes, template) );
+        </script>
     </div>
 </body>
 
 </html>
+
