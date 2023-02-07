@@ -31,20 +31,11 @@
                                     {'<>':'hr'}]
                             };
             
-            async function fetchMemes () {
-                var ret;
-                fetch('https://raw.githubusercontent.com/ltaylor2/madmemes/main/memes.json').then(response => {
+            fetch('https://raw.githubusercontent.com/ltaylor2/madmemes/main/memes.json').then(response => {
                   return response.json();
                 }).then(data => {
-                  ret = data;
-                  console.log(ret);
+                    document.write( json2html.render(data, template) );
                 });
-                return ret;
-            }
-
-            let memes = fetchMemes();
-
-            document.write( json2html.render(memes, template) );
         </script>
     </div>
 </body>
