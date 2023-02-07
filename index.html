@@ -19,7 +19,7 @@
     <div>
         <script>
             let template = {'<>':'div',
-                            'html':[{'<>':'img','src':'${src}','width':'${width}'},
+                            'html':[{'<>':'img','src':'${src}', 'width':'${width}'},
                                     {'<>':'br'},
                                     {'<>':'span', 'html':'${likes}'},
                                     {'<>':'a', 'class':'counter', 
@@ -29,13 +29,20 @@
                                     {'<>':'a', 'class':'counter', 
                                           'html':"\tI don't think about you at all"},
                                     {'<>':'hr'}]
-                            }
+                            };
             
-            var memes; 
+            async function fetchMemes () {
+                var ret;
+                fetch('https://raw.githubusercontent.com/ltaylor2/madmemes/main/memes.json').then(response => {
+                  return response.json();
+                }).then(data => {
+                  ret = data;
+                  console.log(ret);
+                });
+                return ret;
+            }
 
-            fetch("https://raw.githubusercontent.com/ltaylor2/madmemes/main/memes.json")
-                        .then(response => response.json())
-                        .then(json => memes = json);
+            let memes = fetchMemes();
 
             document.write( json2html.render(memes, template) );
         </script>
