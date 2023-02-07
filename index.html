@@ -31,9 +31,11 @@
                                     {'<>':'hr'}]
                             }
             
-            let memes = fetch("https://raw.githubusercontent.com/ltaylor2/madmemes/main/memes.json")
+            let memes; 
+            
+            fetch("https://raw.githubusercontent.com/ltaylor2/madmemes/main/memes.json")
                         .then(response => response.json())
-                        .then(json => console.log(json));
+                        .then(json => json = memes);
 
             document.write( json2html.render(memes, template) );
         </script>
