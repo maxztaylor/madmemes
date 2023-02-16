@@ -1,7 +1,7 @@
 import cv2
 import os
 import pandas as pd
-from random import randrange
+from random import randrange, getrandbits
 from PIL import Image,ImageDraw, ImageFont
 import textwrap
 
@@ -55,7 +55,7 @@ def extract_season_ep(path_name):
 
     return extracted_season_ep
 
-def memetext(img, toptext, bottomtext):
+def memetext(img, toptext, bottomtext, filename):
     draw = ImageDraw.Draw(img)
     font = ImageFont.truetype("Impact.ttf", 120)
 
@@ -66,10 +66,12 @@ def memetext(img, toptext, bottomtext):
     top_text = textwrap.fill(str(toptext).upper(), width=max_width)
     bottom_text = textwrap.fill(str(bottomtext).upper(), width=max_width)
 
-    draw.text((width/2, 10), top_text, font=font, stroke_width=2, stroke_fill="black", align="center", anchor="ma")
+    if(bool(getrandbits(1))):
+        draw.text((width/2, 10), top_text, font=font, stroke_width=2, stroke_fill="black", align="center", anchor="ma")
+
     draw.text((width/2, height - 10), bottom_text, font=font, stroke_width=2, stroke_fill="black", align="center", anchor="md")
 
-    img.save('hello_world.png', "PNG")
+    img.save('./img/auto/' + filename + '.png', "PNG")
 
 def cv2_pil_conv(image):
     image_conv = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
@@ -97,9 +99,8 @@ def memegen():
 
         image_pil = cv2_pil_conv(frame)
 
-        memetext(image_pil, top_text, bottom_text)
+        memetext(image_pil, top_text, bottom_text, 'filename')
 
     # print("Your %d memes are ready!" % num_memes)
 
 memegen()
-
