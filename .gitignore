@@ -1,3 +1,5 @@
 .DS_Store
 *.mkv
 filename.png
+temp.png
+img/auto/*

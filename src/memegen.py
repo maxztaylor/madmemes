@@ -4,8 +4,9 @@ import pandas as pd
 from random import randrange, getrandbits
 from PIL import Image,ImageDraw, ImageFont
 import textwrap
+import shutil
 
-def video_to_frames(video, path_output_dir, filename_prefix):
+def video_to_frames(video):
     # extract frames from a video and save to directory as 'x.png' where 
     # x is the frame index
     vidcap = cv2.VideoCapture(video)
@@ -25,8 +26,7 @@ def video_to_frames(video, path_output_dir, filename_prefix):
 
     success, image = vidcap.read()
     if success:
-        # cv2.imwrite(os.path.join(path_output_dir, '%s - %d.png') % (filename_prefix, rand_ms), image)
-        return image
+        return [image, rand_ms]
     else:
         print('ERROR! Womp womp')
 
@@ -71,7 +71,7 @@ def memetext(img, toptext, bottomtext, filename):
 
     draw.text((width/2, height - 10), bottom_text, font=font, stroke_width=2, stroke_fill="black", align="center", anchor="md")
 
-    img.save('./img/auto/' + filename + '.png', "PNG")
+    img.save('./' + filename + '.png', "PNG")
 
 def cv2_pil_conv(image):
     image_conv = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
@@ -84,23 +84,32 @@ def randtext():
     text_num = randrange(line_count)
     return df_scripts.loc[text_num, 'Text']
 
-def memegen():
-    # num_memes = int(input("How many memes do you want?\n"))
-    num_memes = 1
-
-    for i in range(num_memes):
+def memegen(is_running):
+    while is_running:
         video_input = random_file('../../Shared Media/TV/Mad Men')
         season_ep = extract_season_ep(video_input)
 
-        frame = video_to_frames(video_input, './img/auto', season_ep)
+        rand_frame_tup = video_to_frames(video_input)
+        frame = rand_frame_tup[0]
+        frame_num = rand_frame_tup[1]
 
         top_text = randtext().rstrip(".")
         bottom_text = randtext().rstrip(".")
 
         image_pil = cv2_pil_conv(frame)
 
-        memetext(image_pil, top_text, bottom_text, 'filename')
+        memetext(image_pil, top_text, bottom_text, 'temp')
 
-    # print("Your %d memes are ready!" % num_memes)
+        input_response = input('Save? Y/N/Q(uit): ')
 
-memegen()
+        if input_response.upper() == 'Y':
+            filename = season_ep + '_' + str(frame_num) + '.png'
+            shutil.copy('./temp.png','./img/auto/' + filename)
+            print('Saved as ' + filename)
+            print('Another round!')
+        elif input_response.upper() == 'N':
+            print('Another round!')
+        else:
+            is_running = False
+
+memegen(True)
